@@ -5,6 +5,8 @@ from PIL import ImageTk,Image
 from Component import Component
 from Titlebar import Titlebar
 from Menu import Menu 
+from Playboard import Playboard
+from Settingboard import Settingboard
 
 class MyMain(Toplevel):
     def __init__(self, master):
@@ -24,13 +26,16 @@ class NewRoot(Tk):
         
     
 class Application(object):
-	HEIGHT = 600
+	HEIGHT = 597
 	WIDTH = 805
 
 	def __init__(self,master):
 		self.master = master
-		self.titlebar = Titlebar(self.master)
-		self.menu = Menu(self.master)
+		self.titlebar = Titlebar(self,self.master)
+		self.settingboard = Settingboard(self,self.master)
+		self.playboard = Playboard(self,self.master)
+		self.menu = Menu(self,self.master)
+		
 
 	def Run(self):
 		window_height = Application.HEIGHT

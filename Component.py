@@ -30,3 +30,5 @@ class Component(Frame):
 		for child in self.winfo_children():
 			child.configure(state='normal')
 		self.lift()
+		self.master.focus_set()
+		self.focus_set()

@@ -35,7 +35,7 @@ class Titlebar(Component):
 	TITLEBAR_RELIEF = RAISED
 	TITLEBAR_BG = "#66ffff"
 
-	def __init__(self,master):
+	def __init__(self,app,master):
 		super(Titlebar, self).__init__(master,Titlebar.TITLEBAR_RELIEF,Titlebar.TITLEBAR_BG)
 		
 		self.icon_img = ImageTk.PhotoImage( Image.open(os.path.join(os.path.dirname(os.path.abspath(__file__)),Titlebar.ICON_PATH)))
