@@ -2,9 +2,11 @@ r"""Date: 12/3/2020
     Author: Nguyen Quoc Cuong
 """
 from tkinter import *
+from tkinter_utils import *
 import os
 from PIL import ImageTk,Image
 from Component import Component
+from file_utils import *
 
 class Menu(Component):
 	BACKGROUND_PATH = 'image/unnamed.jpg'
@@ -29,17 +31,18 @@ class Menu(Component):
 	def __init__(self,app,master):
 		super(Menu,self).__init__(master)
 		self.master = master
+		self.focus_set()
 
 		self.backgroundimg = ImageTk.PhotoImage(Image.open(Menu.BACKGROUND_PATH).resize((Menu.WIDTH,Menu.HEIGHT),Image.ANTIALIAS))
 		self.canvas = Canvas(self, highlightthickness=0,width = Menu.WIDTH,height = Menu.HEIGHT)
 		self.canvas.grid(row=0, column=0)
 		self.bg = self.canvas.create_image(0, 0, anchor=NW, image=self.backgroundimg)
 
-		self.playbut = self.Round_rectangle(Menu.PLAY_BBOX)
-		self.custombut = self.Round_rectangle(Menu.CUSTOM_BBOX)
-		self.solvebut = self.Round_rectangle(Menu.SOLVE_BBOX)
-		self.helpbut = self.Round_rectangle(Menu.HELP_BBOX)
-		self.quitbut = self.Round_rectangle(Menu.QUIT_BBOX)
+		self.playbut = Round_rectangle(Menu.PLAY_BBOX,canvas=self.canvas,fill=Menu.BUTTON_BG)
+		self.custombut = Round_rectangle(Menu.CUSTOM_BBOX,canvas=self.canvas,fill=Menu.BUTTON_BG)
+		self.solvebut = Round_rectangle(Menu.SOLVE_BBOX,canvas=self.canvas,fill=Menu.BUTTON_BG)
+		self.helpbut = Round_rectangle(Menu.HELP_BBOX,canvas=self.canvas,fill=Menu.BUTTON_BG)
+		self.quitbut = Round_rectangle(Menu.QUIT_BBOX,canvas=self.canvas,fill=Menu.BUTTON_BG)
 		self.playtext = self.canvas.create_text(Menu.PLAY_POS[0],Menu.PLAY_POS[1],text="PLAY",font=(Menu.FONT_PATH,Menu.TEXT_SIZE),fill=Menu.CHOSENBUTTON_BG)
 		self.customtext = self.canvas.create_text(Menu.CUSTOM_POS[0],Menu.CUSTOM_POS[1],text="CUSTOM",font=(Menu.FONT_PATH,Menu.TEXT_SIZE),fill=Menu.NORMALBUTTON_BG)
 		self.solvetext = self.canvas.create_text(Menu.SOLVE_POS[0],Menu.SOLVE_POS[1],text="SOLVE",font=(Menu.FONT_PATH,Menu.TEXT_SIZE),fill=Menu.NORMALBUTTON_BG)
@@ -56,7 +59,7 @@ class Menu(Component):
 		}
 
 		self.grid(row=1,column=0,columnspan=3)
-		self.bind_all("<Key>",self.Keypress)
+		self.bind("<Key>",self.Keypress)
 		self.canvas.tag_bind(self.playtext,"<Motion>",lambda event,id=0:
 			                                   self.Mouse_move(id))
 		self.canvas.tag_bind(self.customtext,"<Motion>",lambda event,id=1:
@@ -78,6 +81,8 @@ class Menu(Component):
 
 	def Play(self):
 		self.app.playboard.Enable()
+		data = Load_matrix('sample_board/boardstage1.txt')
+		self.app.playboard.Create_board_from_data(data)
 
 	def Custom(self):
 		self.app.settingboard.Enable()
@@ -111,28 +116,3 @@ class Menu(Component):
 				self.Custom()
 			elif self.chosenid==4:
 				self.master.quit()
-			
-	def Round_rectangle(self, bbox, radius=20, **kwargs):
-		x1,y1,x2,y2 = bbox
-		points = [x1+radius, y1,
-		    x1+radius, y1,
-            x2-radius, y1,
-            x2-radius, y1,
-            x2, y1,
-            x2, y1+radius,
-            x2, y1+radius,
-            x2, y2-radius,
-            x2, y2-radius,
-            x2, y2,
-            x2-radius, y2,
-            x2-radius, y2,
-            x1+radius, y2,
-            x1+radius, y2,
-            x1, y2,
-            x1, y2-radius,
-            x1, y2-radius,
-            x1, y1+radius,
-            x1, y1+radius,
-            x1, y1]
-		return self.canvas.create_polygon(points, **kwargs, smooth=True, fill=Menu.BUTTON_BG)
-
