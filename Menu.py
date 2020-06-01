@@ -85,7 +85,7 @@ class Menu(Component):
 		self.app.playboard.Create_board_from_data(data)
 
 	def Custom(self):
-		self.app.settingboard.Enable()
+		self.app.custom_menu.Enable()
 
 	def Reset(self):
 		for i in range(5):

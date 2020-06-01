@@ -7,6 +7,7 @@ from Titlebar import Titlebar
 from Menu import Menu 
 from Playboard import Playboard
 from Settingboard import Settingboard
+from Custom_menu import Custom_menu
 
 class MyMain(Toplevel):
     def __init__(self, master):
@@ -34,6 +35,7 @@ class Application(object):
 		self.titlebar = Titlebar(self,self.master)
 		self.settingboard = Settingboard(self,self.master)
 		self.playboard = Playboard(self,self.master)
+		self.custom_menu = Custom_menu(self,self.master)
 		self.menu = Menu(self,self.master)
 		
 

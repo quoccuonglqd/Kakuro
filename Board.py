@@ -34,18 +34,12 @@ class Board(Component):
 		self.interior_id = self.discanvas.create_window(565, 0, window=self.interior,
                                            anchor=NW)
 		self.label1 = Label(self.interior,text='Grid index: {},{}'.format(0,0),relief=FLAT)
-		self.label1.grid(row=0, column=0, columnspan=2,sticky=W,padx=20,pady=20)
 		self.label2 = Label(self.interior,text='Value: ',relief=FLAT)
-		self.label2.grid(row=1, column=0,padx=(20,0))
 		self.entry1= Entry(self.interior,width=29)
-		self.entry1.grid(row=1, column=1)
 
-		self.log1 = self.discanvas.create_rectangle(570,140,800,380,fill='white',outline='#909692')
-		self.log2 = self.discanvas.create_rectangle(570,400,800,545,fill='white',outline='#909692')
-		self.discanvas.create_rectangle(570,140,800,165,fill='#918e8e',outline='#909692')
-		self.discanvas.create_rectangle(570,400,800,425,fill='#918e8e',outline='#909692')
-		self.discanvas.create_text(610,150,text='Check log')
-		self.discanvas.create_text(610,410,text='State log')
+		self.label1.grid(row=0, column=0, columnspan=2,sticky=W,padx=20,pady=20)
+		self.label2.grid(row=1, column=0,padx=(20,0))
+		self.entry1.grid(row=1, column=1)
 
 		self.canvaselement = []
 		self.mat = []
