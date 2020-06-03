@@ -4,7 +4,8 @@ from os import listdir
 import os.path as osp
 from file_utils import *
 from tkinter import *
-from PIL import ImageTk,Image
+from PIL import ImageTk,Image  
+from kaklib.kaksolve import *  
 
 class Settingboard(Board):
 	BOARD_SIZE = [(8,8),(10,10),(14,14),(16,16)]
@@ -13,26 +14,35 @@ class Settingboard(Board):
 
 		self.optioncanvas_element = []
 		self.entry1.bind('<Key>',self.Update_cell)
-		self.Create_log()
 
-	
-
-	def Create_log(self):
-		self.button2 = Button(self.interior,text='Save board',bg='white',command=self.Save)
-		self.button2.grid(row=2,column=0,pady=10,padx=30)
+		self.button = Button(self.interior,text='Save board',bg='white',command = self.Save,width=30)
+		self.button.grid(row=2,column=0,columnspan=3,padx=(10,20),pady=10,sticky=W)
 		
-		self.log1 = self.discanvas.create_rectangle(570,140,800,380,fill='white',outline='#909692')
+		self.app = app
+		
+		self.log1 = self.discanvas.create_rectangle(570,165,800,380,fill='white',outline='#909692')
 		self.log2 = self.discanvas.create_rectangle(570,400,800,545,fill='white',outline='#909692')
-		self.discanvas.create_rectangle(570,140,800,165,fill='#918e8e',outline='#909692')
+		self.discanvas.create_rectangle(570,165,800,190,fill='#918e8e',outline='#909692')
 		self.discanvas.create_rectangle(570,400,800,425,fill='#918e8e',outline='#909692')
-		self.discanvas.create_text(610,150,text='Check log')
+		self.discanvas.create_text(610,175,text='Check log')
 		self.discanvas.create_text(610,410,text='State log')
+		
 
 	def Create_inialize_board(self,ind):
 		for i in range(len(self.optioncanvas_element)):
 			self.discanvas.delete(self.optioncanvas_element[i])
 
 		self.Inialize_board(Settingboard.BOARD_SIZE[ind][0])
+		for i in range(self.size):
+			for j in range(self.size):
+				for element in self.canvaselement[i][j]:
+					self.discanvas.tag_bind(element,"<Button-3>",lambda event,i=i,j=j:self.Change_cell_type(event,i,j))
+
+	def Create_existing_board(self,data):
+		for i in range(len(self.optioncanvas_element)):
+			self.discanvas.delete(self.optioncanvas_element[i])
+
+		self.Create_board_from_data(data)
 		for i in range(self.size):
 			for j in range(self.size):
 				for element in self.canvaselement[i][j]:
@@ -73,6 +83,7 @@ class Settingboard(Board):
 			self.popup_menu.add_command(label="Split",command=self.Split)
 		else:
 			self.popup_menu.add_command(label="Merge",command=self.Merge)
+		self.popup_menu.add_command(label="Solve",command=self.Solve)
 
 		try:
 			self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
@@ -109,3 +120,10 @@ class Settingboard(Board):
 		for i in range(2):
 			self.discanvas.tag_bind(self.canvaselement[self.currentpos[0]][self.currentpos[1]][i],"<Button-1>",lambda event,i=self.currentpos[0],j=self.currentpos[1]: self.Update_info(i,j))
 			self.discanvas.tag_bind(self.canvaselement[self.currentpos[0]][self.currentpos[1]][i],"<Button-3>",lambda event,i=self.currentpos[0],j=self.currentpos[1]:self.Change_cell_type(event,i,j))
+
+	def Solve(self):
+		Change_format(self.mat,'middle_format.txt')
+		answer = kaksolve('middle_format.txt')
+		for x,y,val in answer:
+			self.discanvas.itemconfig(self.canvaselement[x-1][y-1][1],text=str(val))
+			self.mat[x-1][y-1] = val

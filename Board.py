@@ -30,8 +30,11 @@ class Board(Component):
 		self.discanvas = Canvas(self,bd=0,highlightthickness=0,width = Board.WIDTH,height = Board.HEIGHT)
 		self.discanvas.grid(row=0,column=0)
 
+		self.img = ImageTk.PhotoImage(Image.open('image/home.jpg').resize((30,30),Image.ANTIALIAS))
+		self.discanvas.create_image(575,5,image=self.img,anchor=NW)
+
 		self.interior = Frame(self.discanvas)
-		self.interior_id = self.discanvas.create_window(565, 0, window=self.interior,
+		self.interior_id = self.discanvas.create_window(565, 35, window=self.interior,
                                            anchor=NW)
 		self.label1 = Label(self.interior,text='Grid index: {},{}'.format(0,0),relief=FLAT)
 		self.label2 = Label(self.interior,text='Value: ',relief=FLAT)
@@ -52,7 +55,7 @@ class Board(Component):
 			for j in range(self.size):
 				if type(self.mat[i][j])==int:
 					self.canvaselement[i][j] = [self.discanvas.create_rectangle(j*size,i*size,(j+1)*size,(i+1)*size,fill='white'),
-					self.discanvas.create_text(j*size+Board.RECTTEXTPOS_MAP[self.size],i*size+Board.RECTTEXTPOS_MAP[self.size],text=str(self.mat[i][j]))]
+					                            self.discanvas.create_text(j*size+Board.RECTTEXTPOS_MAP[self.size],i*size+Board.RECTTEXTPOS_MAP[self.size],text=str(self.mat[i][j]))]
 					self.discanvas.tag_bind(self.canvaselement[i][j][0],"<Button-1>",lambda event,i=i,j=j: self.Update_info(i,j))
 					self.discanvas.tag_bind(self.canvaselement[i][j][1],"<Button-1>",lambda event,i=i,j=j: self.Update_info(i,j))
 				else:

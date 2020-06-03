@@ -1,8 +1,10 @@
 from __future__ import absolute_import
 from tkinter import *
 from tkinter_utils import *
+from file_utils import *
 from PIL import ImageTk,Image
 from Component import Component
+from os import listdir
 
 
 class Custom_menu(Component):
@@ -14,6 +16,7 @@ class Custom_menu(Component):
 		super(Custom_menu,self).__init__(master)
 
 		self.app = app
+		self.board_path = 'custom_board'
 
 		self.discanvas = Canvas(self,bd=0,highlightthickness=0,width = Custom_menu.WIDTH,height = Custom_menu.HEIGHT)
 		self.discanvas.grid(row=0,column=0)
@@ -58,6 +61,13 @@ class Custom_menu(Component):
 			           relief=FLAT,bg="gray99", fg="purple3",font="Dosis",command=lambda i=i:self.Create_inialize_board(i)))
 			self.buttons_create[len(self.buttons_create)-1].grid(row=len(self.buttons_create)-1,column=0,pady=10,padx=(65,70))
 
+		self.buttons_open = []
+		for name in listdir(self.board_path):
+			self.path = osp.join(self.board_path,name)
+			self.buttons_open.append(Button(self.open_interior.interior,text=name[:-4],height=2, width=50, 
+			           relief=FLAT,bg="gray99", fg="purple3",font="Dosis",command=lambda :self.Create_board_from_data()))
+			self.buttons_open[len(self.buttons_open)-1].grid(row=len(self.buttons_open)-1,column=0,pady=10,padx=(65,70))
+
 		self.buttons_goto = []
 		for text in Custom_menu.GOTO_BUTTON_TEXT:
 			self.buttons_goto.append(Button(self.goto_interior.interior,text=text,height=2, width=50, 
@@ -69,6 +79,11 @@ class Custom_menu(Component):
 	def Create_inialize_board(self,ind):
 		self.app.settingboard.Enable()
 		self.app.settingboard.Create_inialize_board(ind)
+
+	def Create_board_from_data(self):
+		self.app.settingboard.Enable()
+		data = Load_matrix(self.path)
+		self.app.settingboard.Create_existing_board(data)
 
 	def Resetline(self,id):
 		for i in range(3):

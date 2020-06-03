@@ -81,7 +81,7 @@ class Menu(Component):
 
 	def Play(self):
 		self.app.playboard.Enable()
-		data = Load_matrix('sample_board/boardstage1.txt')
+		data = Load_matrix('test_board/boardstage1.txt')
 		self.app.playboard.Create_board_from_data(data)
 
 	def Custom(self):
